@@ -17,6 +17,6 @@ interface ShopListRepository {
     fun getShopItem(shopItemId: Int): ShopItem
 
     //получать список элементов
-    fun getShopList(): ShopItem
+    fun getShopList(): List<ShopItem>
 
 }
