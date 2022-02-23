@@ -1,8 +1,8 @@
 package ru.yundon.shoplist.domain
 
-class GetShopListUseCase {
+class GetShopListUseCase(private val shopListRepository: ShopListRepository) {
 
     fun getShopList(): ShopItem{
-        TODO()
+        return shopListRepository.getShopList()
     }
 }
