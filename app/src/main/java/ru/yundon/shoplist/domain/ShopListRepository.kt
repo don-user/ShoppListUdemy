@@ -1,5 +1,7 @@
 package ru.yundon.shoplist.domain
 
+import androidx.lifecycle.LiveData
+
 //Этот репозиторий будет и умеет работать с данными
 
 interface ShopListRepository {
@@ -17,6 +19,6 @@ interface ShopListRepository {
     fun getShopItem(shopItemId: Int): ShopItem
 
     //получать список элементов
-    fun getShopList(): List<ShopItem>
+    fun getShopList(): LiveData<List<ShopItem>>
 
 }
