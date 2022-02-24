@@ -1,6 +1,5 @@
 package ru.yundon.shoplist.presentation
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.yundon.shoplist.data.ShopListRepositoryImpl
 import ru.yundon.shoplist.domain.DeleteShopItemUseCase
@@ -27,4 +26,5 @@ class MainViewModel: ViewModel() {
         val newItem = shopItem.copy(enable = !shopItem.enable)
         editShopItemUseCase.editShopItem(newItem)
     }
+
 }
