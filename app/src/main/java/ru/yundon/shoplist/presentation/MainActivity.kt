@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import ru.yundon.shoplist.databinding.ActivityMainBinding
-import ru.yundon.shoplist.domain.ShopItem
 import ru.yundon.shoplist.presentation.ShopListAdapter.Companion.MAX_PULL_SIZE
 import ru.yundon.shoplist.presentation.ShopListAdapter.Companion.TYPE_VIEW_DISABLED
 import ru.yundon.shoplist.presentation.ShopListAdapter.Companion.TYPE_VIEW_ENABLED
@@ -27,7 +26,7 @@ class MainActivity: AppCompatActivity() {
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
         viewModel.shopList.observe(this, {
-            adapterShopList.listItem = it
+            adapterShopList.submitList(it)
         })
     }
 
@@ -59,7 +58,7 @@ class MainActivity: AppCompatActivity() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val item = adapterShopList.listItem[viewHolder.adapterPosition]
+                val item = adapterShopList.currentList[viewHolder.adapterPosition]
                 when (direction) {
                     ItemTouchHelper.LEFT -> {
                         viewModel.deleteShopListItem(item)
