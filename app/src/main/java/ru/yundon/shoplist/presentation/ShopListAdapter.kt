@@ -1,28 +1,23 @@
 package ru.yundon.shoplist.presentation
 
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import ru.yundon.shoplist.R
 import ru.yundon.shoplist.domain.ShopItem
 
-class ShopListAdapter: RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>() {
+class ShopListAdapter: ListAdapter<ShopItem, ShopItemViewHolder>(ShopItemDIffCallback()) {
 
-    var listItem = listOf<ShopItem>()
-        set(value) {
-            val callback = ShopListDiffCallback(listItem, value) // value это новый список
-            val diffResult = DiffUtil.calculateDiff(callback) //делает все расчеты, по каким элементам прошли изменения и хранит эти изменения
-            diffResult.dispatchUpdatesTo(this) //делает обновления в адаптаре удаляя конкретный элемент или перерисовывая конкретный элемент
+//    var listItem = listOf<ShopItem>()
+//        set(value) {
+//            val callback = ShopListDiffCallback(listItem, value) // value это новый список
+//            val diffResult = DiffUtil.calculateDiff(callback) //делает все расчеты, по каким элементам прошли изменения и хранит эти изменения
+//            diffResult.dispatchUpdatesTo(this) //делает обновления в адаптаре удаляя конкретный элемент или перерисовывая конкретный элемент
+//
+//            field = value // обновляем сам список
+//
+//        }
 
-            field = value // обновляем сам список
-
-        }
-
-    var cnt = 0
     var onShopItemLongClickListener: ((ShopItem) -> Unit)? = null //переменная в которой хранится лябмда функция
 
     var onShopItemClickListener: ((ShopItem) -> Unit)? = null //переменная в которой хранится лябмда функция
@@ -40,9 +35,7 @@ class ShopListAdapter: RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>(
 
     override fun onBindViewHolder(holder: ShopItemViewHolder, position: Int) {
 
-        Log.d("MyTag", "onBindViewHolder ${++cnt}")
-
-        val shopItem = listItem[position]
+        val shopItem = getItem(position)
 
         holder.tvName.text = shopItem.name
         holder.tvCount.text = shopItem.count.toString()
@@ -57,23 +50,11 @@ class ShopListAdapter: RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>(
         }
     }
 
-    override fun getItemCount(): Int = listItem.size
+//    override fun getItemCount(): Int = getItem().size
 
     override fun getItemViewType(position: Int): Int {
-        val item = listItem[position]
+        val item = getItem(position)
         return if (item.enable) TYPE_VIEW_ENABLED else TYPE_VIEW_DISABLED
-    }
-
-    class ShopItemViewHolder(val view: View): RecyclerView.ViewHolder(view){
-        val tvName: TextView = view.findViewById(R.id.tv_name)
-        val tvCount: TextView = view.findViewById(R.id.tv_count)
-    }
-
-    interface OnShopItemLongClickListener{
-        fun shopItemLongClick(shopItem: ShopItem)
-    }
-    interface OnShopItemClickListener{
-        fun shopItemClick(shopItem: ShopItem)
     }
 
     companion object{
