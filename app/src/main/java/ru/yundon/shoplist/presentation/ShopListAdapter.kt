@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.yundon.shoplist.R
 import ru.yundon.shoplist.domain.ShopItem
@@ -13,11 +14,15 @@ class ShopListAdapter: RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>(
 
     var listItem = listOf<ShopItem>()
         set(value) {
-            field = value
-            notifyDataSetChanged()
+            val callback = ShopListDiffCallback(listItem, value) // value это новый список
+            val diffResult = DiffUtil.calculateDiff(callback) //делает все расчеты, по каким элементам прошли изменения и хранит эти изменения
+            diffResult.dispatchUpdatesTo(this) //делает обновления в адаптаре удаляя конкретный элемент или перерисовывая конкретный элемент
+
+            field = value // обновляем сам список
+
         }
 
-
+    var cnt = 0
     var onShopItemLongClickListener: ((ShopItem) -> Unit)? = null //переменная в которой хранится лябмда функция
 
     var onShopItemClickListener: ((ShopItem) -> Unit)? = null //переменная в которой хранится лябмда функция
@@ -34,6 +39,9 @@ class ShopListAdapter: RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>(
     }
 
     override fun onBindViewHolder(holder: ShopItemViewHolder, position: Int) {
+
+        Log.d("MyTag", "onBindViewHolder ${++cnt}")
+
         val shopItem = listItem[position]
 
         holder.tvName.text = shopItem.name
