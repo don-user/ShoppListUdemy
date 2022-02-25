@@ -1,57 +1,88 @@
 package ru.yundon.shoplist.presentation
 
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import ru.yundon.shoplist.R
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import ru.yundon.shoplist.databinding.ActivityMainBinding
 import ru.yundon.shoplist.domain.ShopItem
+import ru.yundon.shoplist.presentation.ShopListAdapter.Companion.MAX_PULL_SIZE
+import ru.yundon.shoplist.presentation.ShopListAdapter.Companion.TYPE_VIEW_DISABLED
+import ru.yundon.shoplist.presentation.ShopListAdapter.Companion.TYPE_VIEW_ENABLED
 
 class MainActivity: AppCompatActivity() {
 
-    lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
 
     private lateinit var viewModel: MainViewModel
+    private lateinit var adapterShopList: ShopListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        setupRecyclerView()
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
         viewModel.shopList.observe(this, {
-            Log.d("MyTag", it.toString())
-            showList(it)
+            adapterShopList.listItem = it
         })
     }
 
-    private fun showList(list: List<ShopItem>){
+    private fun setupRecyclerView() = with(binding.rvShopList){
 
-        binding.llShopList.removeAllViews()
+        adapterShopList = ShopListAdapter()
+        adapter = adapterShopList
 
-        for (shopItem in list){
+        //recycledViewPool определяет количество неиспользуемых элементов для каждого типа
+        recycledViewPool.setMaxRecycledViews(TYPE_VIEW_ENABLED, MAX_PULL_SIZE)
+        recycledViewPool.setMaxRecycledViews(TYPE_VIEW_DISABLED, MAX_PULL_SIZE)
+        //вызов лямба функции из адаптера
+        setupOnShopItemLongClickListener()
+        setupClickListener()
+        setupSwipeTouchListener(this)
+    }
 
-            val layoutId = if (shopItem.enable) R.layout.item_shop_enabled else R.layout.item_shop_disabled
 
-            val view = LayoutInflater.from(this).inflate(layoutId, binding.llShopList, false)
-            val tvName = view.findViewById<TextView>(R.id.tv_name)
-            val tvCount = view.findViewById<TextView>(R.id.tv_count)
-            tvName.text = shopItem.name
-            tvCount.text = shopItem.count.toString()
-
-            view.setOnLongClickListener {
-//                Toast.makeText(this, "TEST", Toast.LENGTH_SHORT).show()
-                viewModel.editShopListItem(shopItem)
-                true
+    //функция свайпа
+    private fun setupSwipeTouchListener(rvShopItem: RecyclerView) {
+        val swipeCallback = object :
+            ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
             }
-            binding.llShopList.addView(view)
 
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val item = adapterShopList.listItem[viewHolder.adapterPosition]
+                when (direction) {
+                    ItemTouchHelper.LEFT -> {
+                        viewModel.deleteShopListItem(item)
+                    }
+                    ItemTouchHelper.RIGHT -> {
+                        Toast.makeText(this@MainActivity, "TEST - RIGHT", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(swipeCallback)
+        itemTouchHelper.attachToRecyclerView(rvShopItem)
+    }
+
+    private fun setupClickListener() {
+        adapterShopList.onShopItemClickListener = {
+            Toast.makeText(this@MainActivity, "TEST", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun setupOnShopItemLongClickListener() {
+        adapterShopList.onShopItemLongClickListener = {
+            viewModel.editShopListItem(it)
         }
     }
 }
