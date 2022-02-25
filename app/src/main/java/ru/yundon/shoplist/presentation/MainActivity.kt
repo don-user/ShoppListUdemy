@@ -65,7 +65,7 @@ class MainActivity: AppCompatActivity() {
                         viewModel.deleteShopListItem(item)
                     }
                     ItemTouchHelper.RIGHT -> {
-                        Toast.makeText(this@MainActivity, "TEST - RIGHT", Toast.LENGTH_SHORT).show()
+                        viewModel.deleteShopListItem(item)
                     }
                 }
             }
