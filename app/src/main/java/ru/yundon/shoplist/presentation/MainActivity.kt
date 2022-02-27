@@ -1,7 +1,6 @@
 package ru.yundon.shoplist.presentation
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -28,6 +27,11 @@ class MainActivity: AppCompatActivity() {
         viewModel.shopList.observe(this, {
             adapterShopList.submitList(it)
         })
+
+        binding.buttonAddShopItem.setOnClickListener {
+            val intent = ShopItemActivity().newIntentAddItem(this)
+            startActivity(intent)
+        }
     }
 
     private fun setupRecyclerView() = with(binding.rvShopList){
@@ -75,7 +79,11 @@ class MainActivity: AppCompatActivity() {
 
     private fun setupClickListener() {
         adapterShopList.onShopItemClickListener = {
-            Toast.makeText(this@MainActivity, "TEST", Toast.LENGTH_SHORT).show()
+
+            val intent = ShopItemActivity().newIntentEditItem(this, it.id)
+            startActivity(intent)
+
+            //Toast.makeText(this@MainActivity, "TEST", Toast.LENGTH_SHORT).show()
         }
     }
 
