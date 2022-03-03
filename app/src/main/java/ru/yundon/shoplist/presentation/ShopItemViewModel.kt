@@ -1,5 +1,6 @@
 package ru.yundon.shoplist.presentation
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -39,6 +40,7 @@ class ShopItemViewModel: ViewModel() {
         if (fieldsValid){
             val shopItem = ShopItem(name, count, true)
             addShopItemUseCase.addShopItem(shopItem)
+            Log.d("MyTag", "addShopItem, перед finish")
             finishWork()
         }
 
@@ -78,16 +80,16 @@ class ShopItemViewModel: ViewModel() {
     }
 
     private fun validateInput(name: String, count: Int): Boolean{
-        val result = true
+        var result = true
         if (name.isBlank()) {
             _errorInputName.value = true
-            !result
+            result = false
         }
-        if (count < 0) {
+        if (count <= 0) {
             _errorInputCount.value = true
-            !result
+            result = false
         }
-
+        Log.d("MyTag", "RESULT $result")
         return result
     }
 
