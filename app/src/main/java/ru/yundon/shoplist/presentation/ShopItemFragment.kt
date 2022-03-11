@@ -102,9 +102,6 @@ class ShopItemFragment: Fragment() {
         btSave.setOnClickListener {
             Toast.makeText(context, "BUTTON", Toast.LENGTH_SHORT).show()
             viewModel.addShopItem(edName.text?.toString(), edCount.text?.toString())
-            viewModel.shouldCloseScreen.observe(viewLifecycleOwner) {
-                activity?.onBackPressed()
-            }
         }
     }
     //проверка параметров которые передаются через аргументы
