@@ -3,25 +3,21 @@ package ru.yundon.shoplist.presentation
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import ru.yundon.shoplist.R
 import ru.yundon.shoplist.databinding.ActivityShopItemBinding
 import ru.yundon.shoplist.domain.ShopItem.Companion.UNDEFINED_ID
 
 class ShopItemActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityShopItemBinding
+    private val  binding by lazy { ActivityShopItemBinding.inflate(layoutInflater) }
+
 //    private lateinit var viewModel: ShopItemViewModel
     private var screenMode = MODE_UNKNOWN
     private var shopItemId = UNDEFINED_ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityShopItemBinding.inflate(layoutInflater)
         setContentView(binding.root)
         parseIntent()
 //        viewModel = ViewModelProvider(this)[ShopItemViewModel::class.java]

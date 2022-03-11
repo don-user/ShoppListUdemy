@@ -45,16 +45,16 @@ class ShopItemFragment: Fragment() {
     }
 
 
-        private fun observeViewModel(){
-        viewModel.errorInputCount.observe(viewLifecycleOwner){
+        private fun observeViewModel() = with(viewModel){
+        errorInputCount.observe(viewLifecycleOwner){
             val messageCount = if (it) getString(R.string.error_input_count) else null
             binding.tilCount.error = messageCount
         }
-        viewModel.errorInputName.observe(viewLifecycleOwner){
+        errorInputName.observe(viewLifecycleOwner){
             val messageName = if (it) getString(R.string.error_input_name) else null
             binding.tilName.error = messageName
         }
-        viewModel.shouldCloseScreen.observe(viewLifecycleOwner){
+        shouldCloseScreen.observe(viewLifecycleOwner){
             activity?.onBackPressed()
         }
     }
