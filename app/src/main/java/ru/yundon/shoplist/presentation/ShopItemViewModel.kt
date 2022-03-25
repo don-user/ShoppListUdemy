@@ -62,9 +62,7 @@ class ShopItemViewModel: ViewModel() {
                 editShopItemUseCase.editShopItem(item)
                 finishWork()
             }
-
         }
-
     }
 
     private fun parseName(inputName: String?): String{
