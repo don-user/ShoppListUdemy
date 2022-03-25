@@ -2,11 +2,15 @@ package ru.yundon.shoplist.presentation
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.ListAdapter
 import ru.yundon.shoplist.R
+import ru.yundon.shoplist.databinding.ItemShopDisabledBinding
+import ru.yundon.shoplist.databinding.ItemShopEnabledBinding
 import ru.yundon.shoplist.domain.ShopItem
 
-class ShopListAdapter: ListAdapter<ShopItem, ShopItemViewHolder>(ShopItemDIffCallback()) {
+class ShopListAdapter: ListAdapter<ShopItem, ShopItemViewHolder> (ShopItemDIffCallback()) {
 
 //    var listItem = listOf<ShopItem>()
 //        set(value) {
@@ -29,23 +33,38 @@ class ShopListAdapter: ListAdapter<ShopItem, ShopItemViewHolder>(ShopItemDIffCal
             TYPE_VIEW_DISABLED -> R.layout.item_shop_disabled
             else -> throw RuntimeException("Unknown view type: $viewType")
         }
-        val view = LayoutInflater.from(parent.context).inflate(layout, parent, false)
-        return ShopItemViewHolder(view)
+        val binding = DataBindingUtil.inflate<ViewDataBinding>( //нужно явно указать ViewDataBinding
+            LayoutInflater.from(parent.context),
+            layout,
+            parent,
+            false
+        )
+        return ShopItemViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ShopItemViewHolder, position: Int) {
 
         val shopItem = getItem(position)
+        val binding = holder.binding
 
-        holder.tvName.text = shopItem.name
-        holder.tvCount.text = shopItem.count.toString()
+        when (binding){
+            is ItemShopDisabledBinding ->{
+                binding.tvName.text = shopItem.name
+                binding.tvCount.text = shopItem.count.toString()
+            }
+            is ItemShopEnabledBinding -> {
+                binding.tvName.text = shopItem.name
+                binding.tvCount.text = shopItem.count.toString()
+            }
+        }
 
-        holder.view.setOnLongClickListener {
+
+        binding.root.setOnLongClickListener {
             onShopItemLongClickListener?.invoke(shopItem) // если тип hullable то необходимо вызывать invoke
             true
         }
 
-        holder.view.setOnClickListener {
+        binding.root.setOnClickListener {
             onShopItemClickListener?.invoke(shopItem)
         }
     }
