@@ -1,7 +1,7 @@
-package ru.yundon.shoplist.presentation
+package ru.yundon.shoplist.presentation.adapter
 
 import androidx.recyclerview.widget.DiffUtil
-import ru.yundon.shoplist.domain.ShopItem
+import ru.yundon.shoplist.domain.model.ShopItem
 
 
 //класс для сравнения нового списка и старого для адаптера

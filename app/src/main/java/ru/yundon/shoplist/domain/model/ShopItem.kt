@@ -1,4 +1,4 @@
-package ru.yundon.shoplist.domain
+package ru.yundon.shoplist.domain.model
 
 data class ShopItem(
     val name: String,

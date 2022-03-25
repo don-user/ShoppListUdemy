@@ -1,14 +1,14 @@
-package ru.yundon.shoplist.presentation
+package ru.yundon.shoplist.presentation.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.yundon.shoplist.data.ShopListRepositoryImpl
-import ru.yundon.shoplist.domain.AddShopItemUseCase
-import ru.yundon.shoplist.domain.EditShopItemUseCase
-import ru.yundon.shoplist.domain.GetShopItemByIdUseCase
-import ru.yundon.shoplist.domain.ShopItem
+import ru.yundon.shoplist.domain.usecases.AddShopItemUseCase
+import ru.yundon.shoplist.domain.usecases.EditShopItemUseCase
+import ru.yundon.shoplist.domain.usecases.GetShopItemByIdUseCase
+import ru.yundon.shoplist.domain.model.ShopItem
 import kotlin.Exception
 
 class ShopItemViewModel: ViewModel() {

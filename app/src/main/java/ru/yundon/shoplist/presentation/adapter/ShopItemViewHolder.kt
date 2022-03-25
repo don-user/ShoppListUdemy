@@ -1,4 +1,4 @@
-package ru.yundon.shoplist.presentation
+package ru.yundon.shoplist.presentation.adapter
 
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView

@@ -1,4 +1,4 @@
-package ru.yundon.shoplist.presentation
+package ru.yundon.shoplist.presentation.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -9,9 +9,12 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import ru.yundon.shoplist.R
 import ru.yundon.shoplist.databinding.ActivityMainBinding
-import ru.yundon.shoplist.presentation.ShopListAdapter.Companion.MAX_PULL_SIZE
-import ru.yundon.shoplist.presentation.ShopListAdapter.Companion.TYPE_VIEW_DISABLED
-import ru.yundon.shoplist.presentation.ShopListAdapter.Companion.TYPE_VIEW_ENABLED
+import ru.yundon.shoplist.presentation.viewmodels.MainViewModel
+import ru.yundon.shoplist.presentation.fragment.ShopItemFragment
+import ru.yundon.shoplist.presentation.adapter.ShopListAdapter
+import ru.yundon.shoplist.presentation.adapter.ShopListAdapter.Companion.MAX_PULL_SIZE
+import ru.yundon.shoplist.presentation.adapter.ShopListAdapter.Companion.TYPE_VIEW_DISABLED
+import ru.yundon.shoplist.presentation.adapter.ShopListAdapter.Companion.TYPE_VIEW_ENABLED
 
 class MainActivity: AppCompatActivity() {
 
@@ -19,12 +22,11 @@ class MainActivity: AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var adapterShopList: ShopListAdapter
-    private var shopItemContainer: FragmentContainerView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        shopItemContainer = binding.shopItemContainer
+
         setupRecyclerView()
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
@@ -44,7 +46,7 @@ class MainActivity: AppCompatActivity() {
 
     //проверяем если shopItemContainer равен null то вертикальный вид в 1 колонку, если нет то горизонтальный в 2 колонки
     private fun isOnePaneMode(): Boolean{
-        return shopItemContainer == null
+        return binding.shopItemContainer == null
     }
     //запуск верного контейнера фрагмента
     private fun launchFragment(fragment: Fragment){
