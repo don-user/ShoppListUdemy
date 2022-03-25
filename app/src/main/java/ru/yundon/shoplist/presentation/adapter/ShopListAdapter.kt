@@ -1,4 +1,4 @@
-package ru.yundon.shoplist.presentation
+package ru.yundon.shoplist.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import ru.yundon.shoplist.R
 import ru.yundon.shoplist.databinding.ItemShopDisabledBinding
 import ru.yundon.shoplist.databinding.ItemShopEnabledBinding
-import ru.yundon.shoplist.domain.ShopItem
+import ru.yundon.shoplist.domain.model.ShopItem
 
 class ShopListAdapter: ListAdapter<ShopItem, ShopItemViewHolder> (ShopItemDIffCallback()) {
 
@@ -21,6 +21,7 @@ class ShopListAdapter: ListAdapter<ShopItem, ShopItemViewHolder> (ShopItemDIffCa
 //            field = value // обновляем сам список
 //
 //        }
+
 
     var onShopItemLongClickListener: ((ShopItem) -> Unit)? = null //переменная в которой хранится лябмда функция
 
@@ -39,6 +40,7 @@ class ShopListAdapter: ListAdapter<ShopItem, ShopItemViewHolder> (ShopItemDIffCa
             parent,
             false
         )
+
         return ShopItemViewHolder(binding)
     }
 
@@ -49,12 +51,10 @@ class ShopListAdapter: ListAdapter<ShopItem, ShopItemViewHolder> (ShopItemDIffCa
 
         when (binding){
             is ItemShopDisabledBinding ->{
-                binding.tvName.text = shopItem.name
-                binding.tvCount.text = shopItem.count.toString()
+                binding.shopItem = shopItem
             }
             is ItemShopEnabledBinding -> {
-                binding.tvName.text = shopItem.name
-                binding.tvCount.text = shopItem.count.toString()
+                binding.shopItem = shopItem
             }
         }
 

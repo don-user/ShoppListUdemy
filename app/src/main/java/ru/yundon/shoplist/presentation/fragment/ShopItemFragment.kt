@@ -1,4 +1,4 @@
-package ru.yundon.shoplist.presentation
+package ru.yundon.shoplist.presentation.fragment
 
 import android.os.Bundle
 import android.text.Editable
@@ -11,12 +11,18 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import ru.yundon.shoplist.R
 import ru.yundon.shoplist.databinding.FragmentShopItemBinding
-import ru.yundon.shoplist.domain.ShopItem.Companion.UNDEFINED_ID
+import ru.yundon.shoplist.domain.model.ShopItem.Companion.UNDEFINED_ID
+import ru.yundon.shoplist.presentation.viewmodels.ShopItemViewModel
 
 class ShopItemFragment: Fragment() {
 
-    lateinit var binding: FragmentShopItemBinding
-    private lateinit var viewModel: ShopItemViewModel
+    private var _binding: FragmentShopItemBinding? = null
+    private val binding: FragmentShopItemBinding
+        get() = _binding ?: throw RuntimeException("Param screen name is absent")
+
+    private val viewModels by lazy {
+        ViewModelProvider(this)[ShopItemViewModel::class.java]
+    }
     private var screenMode: String = MODE_UNKNOWN
     private var shopItemId: Int = UNDEFINED_ID
 
@@ -30,7 +36,7 @@ class ShopItemFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentShopItemBinding.inflate(inflater, container, false)
+        _binding = FragmentShopItemBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -38,22 +44,20 @@ class ShopItemFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this)[ShopItemViewModel::class.java]
+        binding.viewModel = viewModels
+        binding.lifecycleOwner = viewLifecycleOwner
         addTextChangeListeners()
         launchRightMode()
         observeViewModel()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 
-        private fun observeViewModel() = with(viewModel){
-        errorInputCount.observe(viewLifecycleOwner){
-            val messageCount = if (it) getString(R.string.error_input_count) else null
-            binding.tilCount.error = messageCount
-        }
-        errorInputName.observe(viewLifecycleOwner){
-            val messageName = if (it) getString(R.string.error_input_name) else null
-            binding.tilName.error = messageName
-        }
+    private fun observeViewModel() = with(viewModels){
+
         shouldCloseScreen.observe(viewLifecycleOwner){
             activity?.onBackPressed()
         }
@@ -63,7 +67,7 @@ class ShopItemFragment: Fragment() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.resetErrorInputName()
+                viewModels.resetErrorInputName()
             }
             override fun afterTextChanged(p0: Editable?) {
             }
@@ -73,7 +77,7 @@ class ShopItemFragment: Fragment() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.resetErrorInputCount()
+                viewModels.resetErrorInputCount()
             }
             override fun afterTextChanged(p0: Editable?) {
             }
@@ -83,25 +87,22 @@ class ShopItemFragment: Fragment() {
     private fun launchRightMode(){
         when(screenMode){
             MODE_EDIT -> launchEditMode()
-            MODE_ADD-> launchAddMode()
+            MODE_ADD -> launchAddMode()
         }
     }
 
     private fun launchEditMode() = with(binding) {
-        viewModel.getShopItemById(shopItemId)
-        viewModel.shopItem.observe(viewLifecycleOwner){
-            edName.setText(it.name)
-            edCount.setText(it.count.toString())
-        }
+
+        viewModels.getShopItemById(shopItemId)
         btSave.setOnClickListener {
-            viewModel.editShopItem(edName.text?.toString(), edCount.text?.toString())
+            viewModels.editShopItem(edName.text?.toString(), edCount.text?.toString())
         }
     }
 
     private fun launchAddMode() = with(binding) {
         btSave.setOnClickListener {
-            Toast.makeText(context, "BUTTON", Toast.LENGTH_SHORT).show()
-            viewModel.addShopItem(edName.text?.toString(), edCount.text?.toString())
+//            Toast.makeText(context, "BUTTON", Toast.LENGTH_SHORT).show()
+            viewModels.addShopItem(edName.text?.toString(), edCount.text?.toString())
         }
     }
     //проверка параметров которые передаются через аргументы
@@ -130,7 +131,7 @@ class ShopItemFragment: Fragment() {
         private const val MODE_UNKNOWN = ""
 
         //передача параметров в активити через аргументы
-        fun newInstanceAddNewItem(): ShopItemFragment{
+        fun newInstanceAddNewItem(): ShopItemFragment {
             return ShopItemFragment().apply {
                 arguments = Bundle().apply {
                     putString(SCREEN_MODE, MODE_ADD)
@@ -138,7 +139,7 @@ class ShopItemFragment: Fragment() {
             }
         }
         //передача параметров в активити через аргументы
-        fun newInstanceEditNewItem(shopItemId: Int): ShopItemFragment{
+        fun newInstanceEditNewItem(shopItemId: Int): ShopItemFragment {
             return ShopItemFragment().apply {
                 arguments = Bundle().apply {
                     putString(SCREEN_MODE, MODE_EDIT)

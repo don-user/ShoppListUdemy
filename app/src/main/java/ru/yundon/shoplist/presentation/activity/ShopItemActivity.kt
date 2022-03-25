@@ -1,4 +1,4 @@
-package ru.yundon.shoplist.presentation
+package ru.yundon.shoplist.presentation.activity
 
 import android.content.Context
 import android.content.Intent
@@ -6,7 +6,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import ru.yundon.shoplist.R
 import ru.yundon.shoplist.databinding.ActivityShopItemBinding
-import ru.yundon.shoplist.domain.ShopItem.Companion.UNDEFINED_ID
+import ru.yundon.shoplist.domain.model.ShopItem.Companion.UNDEFINED_ID
+import ru.yundon.shoplist.presentation.fragment.ShopItemFragment
 
 class ShopItemActivity : AppCompatActivity() {
 
@@ -27,7 +28,7 @@ class ShopItemActivity : AppCompatActivity() {
     private fun launchRightMode(){
         val fragment = when(screenMode){
             MODE_EDIT -> ShopItemFragment.newInstanceEditNewItem(shopItemId)
-            MODE_ADD-> ShopItemFragment.newInstanceAddNewItem()
+            MODE_ADD -> ShopItemFragment.newInstanceAddNewItem()
             else -> throw RuntimeException("Unknown screen mode $screenMode")
         }
     supportFragmentManager.beginTransaction()

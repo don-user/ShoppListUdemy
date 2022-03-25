@@ -1,6 +1,7 @@
 package ru.yundon.shoplist.domain
 
 import androidx.lifecycle.LiveData
+import ru.yundon.shoplist.domain.model.ShopItem
 
 //Этот репозиторий будет и умеет работать с данными
 

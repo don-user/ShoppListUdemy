@@ -2,11 +2,10 @@ package ru.yundon.shoplist.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import ru.yundon.shoplist.domain.ShopItem
-import ru.yundon.shoplist.domain.ShopItem.Companion.UNDEFINED_ID
+import ru.yundon.shoplist.domain.model.ShopItem
+import ru.yundon.shoplist.domain.model.ShopItem.Companion.UNDEFINED_ID
 import ru.yundon.shoplist.domain.ShopListRepository
 import java.lang.RuntimeException
-import kotlin.random.Random
 
 object ShopListRepositoryImpl: ShopListRepository {
 

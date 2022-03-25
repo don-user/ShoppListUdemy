@@ -1,11 +1,11 @@
-package ru.yundon.shoplist.presentation
+package ru.yundon.shoplist.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import ru.yundon.shoplist.data.ShopListRepositoryImpl
-import ru.yundon.shoplist.domain.DeleteShopItemUseCase
-import ru.yundon.shoplist.domain.EditShopItemUseCase
-import ru.yundon.shoplist.domain.GetShopListUseCase
-import ru.yundon.shoplist.domain.ShopItem
+import ru.yundon.shoplist.domain.usecases.DeleteShopItemUseCase
+import ru.yundon.shoplist.domain.usecases.EditShopItemUseCase
+import ru.yundon.shoplist.domain.usecases.GetShopListUseCase
+import ru.yundon.shoplist.domain.model.ShopItem
 
 class MainViewModel: ViewModel() {
 
