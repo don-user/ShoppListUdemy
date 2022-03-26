@@ -8,16 +8,16 @@ import ru.yundon.shoplist.domain.model.ShopItem
 interface ShopListRepository {
 
     //добавлять элемент
-    fun addShopItem(shopItem: ShopItem)
+    suspend fun addShopItem(shopItem: ShopItem)
 
     //удалять элемент
-    fun deleteShopItem(shopItem: ShopItem)
+    suspend fun deleteShopItem(shopItem: ShopItem)
 
     //редактировать элемент
-    fun editShopItem(shopItem: ShopItem)
+    suspend fun editShopItem(shopItem: ShopItem)
 
     //получать элемент по item
-    fun getShopItem(shopItemId: Int): ShopItem
+    suspend fun getShopItem(shopItemId: Int): ShopItem
 
     //получать список элементов
     fun getShopList(): LiveData<List<ShopItem>>
