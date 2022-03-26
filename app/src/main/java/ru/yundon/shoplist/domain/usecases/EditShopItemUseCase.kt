@@ -5,7 +5,7 @@ import ru.yundon.shoplist.domain.ShopListRepository
 
 class EditShopItemUseCase(private val shopListRepository: ShopListRepository) {
 
-    fun editShopItem(shopItem: ShopItem){
+    suspend fun editShopItem(shopItem: ShopItem){
         shopListRepository.editShopItem(shopItem)
     }
 }

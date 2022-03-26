@@ -3,7 +3,6 @@ package ru.yundon.shoplist.presentation.activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -114,7 +113,7 @@ class MainActivity: AppCompatActivity() {
 
     private fun setupOnShopItemLongClickListener() {
         adapterShopList.onShopItemLongClickListener = {
-            viewModel.editShopListItem(it)
+            viewModel.changeEnableState(it)
         }
     }
 }

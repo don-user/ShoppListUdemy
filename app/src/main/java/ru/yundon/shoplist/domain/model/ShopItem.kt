@@ -7,6 +7,6 @@ data class ShopItem(
     var id: Int = UNDEFINED_ID
 ) {
     companion object{
-        const val UNDEFINED_ID = -1 //-1 означает, что id еще не установлен
+        const val UNDEFINED_ID = 0 //-1 означает, что id еще не установлен
     }
 }

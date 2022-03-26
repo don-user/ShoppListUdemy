@@ -1,15 +1,19 @@
 package ru.yundon.shoplist.presentation.viewmodels
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import ru.yundon.shoplist.data.ShopListRepositoryImpl
 import ru.yundon.shoplist.domain.usecases.DeleteShopItemUseCase
 import ru.yundon.shoplist.domain.usecases.EditShopItemUseCase
 import ru.yundon.shoplist.domain.usecases.GetShopListUseCase
 import ru.yundon.shoplist.domain.model.ShopItem
 
-class MainViewModel: ViewModel() {
+class MainViewModel(application: Application): AndroidViewModel(application) {
 
-    private val repository = ShopListRepositoryImpl  // не правильная реализация, в дальнейщем поправим, presentation не должен зависить от data
+    private val repository = ShopListRepositoryImpl(application)  // не правильная реализация, в дальнейщем поправим, presentation не должен зависить от data
 
     private val getShopListUseCase = GetShopListUseCase(repository)
     private val deleteShopItemUseCase = DeleteShopItemUseCase(repository)
@@ -19,12 +23,19 @@ class MainViewModel: ViewModel() {
 
 
     fun deleteShopListItem(shopItem: ShopItem){
-        deleteShopItemUseCase.deleteShopItem(shopItem)
+        viewModelScope.launch {
+            deleteShopItemUseCase.deleteShopItem(shopItem)
+        }
+
     }
 
-    fun editShopListItem(shopItem: ShopItem){
-        val newItem = shopItem.copy(enable = !shopItem.enable)
-        editShopItemUseCase.editShopItem(newItem)
+    fun changeEnableState(shopItem: ShopItem){
+
+        viewModelScope.launch {
+            val newItem = shopItem.copy(enable = !shopItem.enable)
+            editShopItemUseCase.editShopItem(newItem)
+        }
+
     }
 
 }
