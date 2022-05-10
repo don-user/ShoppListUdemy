@@ -1,18 +1,20 @@
 package ru.yundon.shoplist.presentation.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import ru.yundon.shoplist.R
 import ru.yundon.shoplist.databinding.FragmentShopItemBinding
 import ru.yundon.shoplist.domain.model.ShopItem.Companion.UNDEFINED_ID
+import ru.yundon.shoplist.presentation.ShopItemApp
 import ru.yundon.shoplist.presentation.viewmodels.ShopItemViewModel
+import ru.yundon.shoplist.presentation.viewmodels.ViewModelFactory
+import javax.inject.Inject
 
 class ShopItemFragment: Fragment() {
 
@@ -20,12 +22,23 @@ class ShopItemFragment: Fragment() {
     private val binding: FragmentShopItemBinding
         get() = _binding ?: throw RuntimeException("Param screen name is absent")
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
     private val viewModels by lazy {
-        ViewModelProvider(this)[ShopItemViewModel::class.java]
+        ViewModelProvider(this, viewModelFactory)[ShopItemViewModel::class.java]
     }
     private var screenMode: String = MODE_UNKNOWN
     private var shopItemId: Int = UNDEFINED_ID
 
+   private val component by lazy {
+       (requireActivity().application as ShopItemApp).component
+   }
+
+    override fun onAttach(context: Context) {
+        component.inject(this)
+        super.onAttach(context)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         parseParams()
