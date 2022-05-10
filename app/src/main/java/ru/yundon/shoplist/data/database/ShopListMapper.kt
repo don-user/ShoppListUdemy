@@ -1,8 +1,9 @@
 package ru.yundon.shoplist.data.database
 
 import ru.yundon.shoplist.domain.model.ShopItem
+import javax.inject.Inject
 
-class ShopListMapper {
+class ShopListMapper @Inject constructor() {
 
     fun mapModelToEntity(shopItem: ShopItem): ShopItemEntity{
         return ShopItemEntity(

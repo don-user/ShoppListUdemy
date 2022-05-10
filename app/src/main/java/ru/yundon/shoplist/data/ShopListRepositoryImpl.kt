@@ -1,17 +1,19 @@
 package ru.yundon.shoplist.data
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import ru.yundon.shoplist.data.database.ShopListDatabase
+import ru.yundon.shoplist.data.database.ShopListDao
 import ru.yundon.shoplist.data.database.ShopListMapper
 import ru.yundon.shoplist.domain.ShopListRepository
 import ru.yundon.shoplist.domain.model.ShopItem
+import javax.inject.Inject
 
-class ShopListRepositoryImpl (application: Application): ShopListRepository {
+class ShopListRepositoryImpl @Inject constructor(
+    private val shopListDao: ShopListDao,
+    private val mapper: ShopListMapper
+): ShopListRepository {
 
-    private val shopListDao = ShopListDatabase.getInstance(application).shopListDao()
-    private val mapper = ShopListMapper()
+
 
     override suspend fun addShopItem(shopItem: ShopItem) {
 

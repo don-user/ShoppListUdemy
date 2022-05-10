@@ -36,6 +36,5 @@ abstract class ShopListDatabase : RoomDatabase(){
                 return db
             }
         }
-
     }
 }
