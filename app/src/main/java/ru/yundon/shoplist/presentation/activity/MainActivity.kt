@@ -8,12 +8,15 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import ru.yundon.shoplist.R
 import ru.yundon.shoplist.databinding.ActivityMainBinding
-import ru.yundon.shoplist.presentation.viewmodels.MainViewModel
-import ru.yundon.shoplist.presentation.fragment.ShopItemFragment
+import ru.yundon.shoplist.presentation.ShopItemApp
 import ru.yundon.shoplist.presentation.adapter.ShopListAdapter
 import ru.yundon.shoplist.presentation.adapter.ShopListAdapter.Companion.MAX_PULL_SIZE
 import ru.yundon.shoplist.presentation.adapter.ShopListAdapter.Companion.TYPE_VIEW_DISABLED
 import ru.yundon.shoplist.presentation.adapter.ShopListAdapter.Companion.TYPE_VIEW_ENABLED
+import ru.yundon.shoplist.presentation.fragment.ShopItemFragment
+import ru.yundon.shoplist.presentation.viewmodels.MainViewModel
+import ru.yundon.shoplist.presentation.viewmodels.ViewModelFactory
+import javax.inject.Inject
 
 class MainActivity: AppCompatActivity() {
 
@@ -22,16 +25,26 @@ class MainActivity: AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
     private lateinit var adapterShopList: ShopListAdapter
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val component by lazy {
+        (application as ShopItemApp).component
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        component.inject(this)
+
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         setupRecyclerView()
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        viewModel = ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
 
-        viewModel.shopList.observe(this, {
+        viewModel.shopList.observe(this) {
             adapterShopList.submitList(it)
-        })
+        }
 
         binding.buttonAddShopItem.setOnClickListener {
             if (isOnePaneMode()) {
