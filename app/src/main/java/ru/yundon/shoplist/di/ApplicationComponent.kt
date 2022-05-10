@@ -6,6 +6,7 @@ import dagger.Component
 import ru.yundon.shoplist.presentation.activity.MainActivity
 import ru.yundon.shoplist.presentation.fragment.ShopItemFragment
 
+@ApplicationScope
 @Component(modules = [DataModule::class, DomainModule::class, ViewModelModule::class])
 interface ApplicationComponent {
 
