@@ -1,23 +1,22 @@
 package ru.yundon.shoplist.presentation.viewmodels
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.yundon.shoplist.data.ShopListRepositoryImpl
+import ru.yundon.shoplist.domain.model.ShopItem
 import ru.yundon.shoplist.domain.usecases.AddShopItemUseCase
 import ru.yundon.shoplist.domain.usecases.EditShopItemUseCase
 import ru.yundon.shoplist.domain.usecases.GetShopItemByIdUseCase
-import ru.yundon.shoplist.domain.model.ShopItem
-import kotlin.Exception
+import javax.inject.Inject
 
-class ShopItemViewModel(application: Application): AndroidViewModel(application) {
-
-    private val repository = ShopListRepositoryImpl(application)
-
-    private val addShopItemUseCase = AddShopItemUseCase(repository)
-    private val getShopItemByIDUseCase = GetShopItemByIdUseCase(repository)
-    private val editShopItemUseCase = EditShopItemUseCase(repository)
+class ShopItemViewModel @Inject constructor(
+    private val addShopItemUseCase: AddShopItemUseCase,
+    private val getShopItemByIDUseCase: GetShopItemByIdUseCase,
+    private val editShopItemUseCase: EditShopItemUseCase
+): ViewModel() {
 
     private val _errorInputName = MutableLiveData<Boolean>()
     val errorInputName: LiveData <Boolean>
