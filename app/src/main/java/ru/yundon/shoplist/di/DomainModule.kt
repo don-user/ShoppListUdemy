@@ -8,6 +8,7 @@ import ru.yundon.shoplist.domain.ShopListRepository
 @Module
 interface DomainModule {
 
+    @ApplicationScope
     @Binds
     fun bindShopListRepository(repositoryImpl: ShopListRepositoryImpl) : ShopListRepository
 
