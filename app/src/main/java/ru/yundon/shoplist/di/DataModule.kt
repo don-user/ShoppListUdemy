@@ -9,12 +9,10 @@ import ru.yundon.shoplist.data.database.ShopListDatabase
 @Module
 class DataModule {
 
-
     @ApplicationScope
     @Provides
     fun provideShopListDao (application: Application): ShopListDao {
 
         return ShopListDatabase.getInstance(application).shopListDao()
     }
-
 }
