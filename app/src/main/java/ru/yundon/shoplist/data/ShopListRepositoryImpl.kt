@@ -3,7 +3,6 @@ package ru.yundon.shoplist.data
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import ru.yundon.shoplist.data.database.ShopListDao
-import ru.yundon.shoplist.data.database.ShopListMapper
 import ru.yundon.shoplist.domain.ShopListRepository
 import ru.yundon.shoplist.domain.model.ShopItem
 import javax.inject.Inject

@@ -1,6 +1,8 @@
 package ru.yundon.shoplist.presentation.activity
 
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -8,6 +10,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import ru.yundon.shoplist.R
 import ru.yundon.shoplist.databinding.ActivityMainBinding
+import ru.yundon.shoplist.domain.model.ShopItem
 import ru.yundon.shoplist.presentation.ShopItemApp
 import ru.yundon.shoplist.presentation.adapter.ShopListAdapter
 import ru.yundon.shoplist.presentation.adapter.ShopListAdapter.Companion.MAX_PULL_SIZE
@@ -17,6 +20,7 @@ import ru.yundon.shoplist.presentation.fragment.ShopItemFragment
 import ru.yundon.shoplist.presentation.viewmodels.MainViewModel
 import ru.yundon.shoplist.presentation.viewmodels.ViewModelFactory
 import javax.inject.Inject
+import kotlin.concurrent.thread
 
 class MainActivity: AppCompatActivity() {
 
@@ -53,6 +57,32 @@ class MainActivity: AppCompatActivity() {
             }else{
                 launchFragment(ShopItemFragment.newInstanceAddNewItem())
             }
+        }
+        //необходимо запустить не на главном потоке, пока без корутин, надо через корутины попробовать
+        thread {
+            val cursor = contentResolver.query(
+                Uri.parse("content://ru.yundon.shoplist/shop_items"),
+                null,
+                null,
+                null,
+                null,
+                null,
+            )
+            //проверяем на true если тру, то записи есть и переходим по всем записям
+            while (cursor?.moveToNext() == true){
+                val id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
+                val name = cursor.getString(cursor.getColumnIndexOrThrow("name"))
+                val count = cursor.getInt(cursor.getColumnIndexOrThrow("count"))
+                val enable = cursor.getInt(cursor.getColumnIndexOrThrow("enable")) > 0 // если больше 0 то получаем true, если меньше 0 то false
+                val shopItem = ShopItem(
+                    id = id,
+                    name = name,
+                    count = count,
+                    enable = enable
+                )
+                Log.d("MyTag", "$shopItem")
+            }
+            cursor?.close()  //обязательно надо курсор закрывать
         }
     }
 

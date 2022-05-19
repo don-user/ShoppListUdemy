@@ -1,11 +1,12 @@
-package ru.yundon.shoplist.data.database
+package ru.yundon.shoplist.data
 
+import ru.yundon.shoplist.data.database.ShopItemEntity
 import ru.yundon.shoplist.domain.model.ShopItem
 import javax.inject.Inject
 
 class ShopListMapper @Inject constructor() {
 
-    fun mapModelToEntity(shopItem: ShopItem): ShopItemEntity{
+    fun mapModelToEntity(shopItem: ShopItem): ShopItemEntity {
         return ShopItemEntity(
             id = shopItem.id,
             name = shopItem.name,
