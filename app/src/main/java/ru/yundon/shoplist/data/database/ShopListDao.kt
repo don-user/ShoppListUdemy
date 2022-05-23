@@ -19,8 +19,15 @@ interface ShopListDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addShopItem(shopItemEntity: ShopItemEntity)
 
+    //для добавление через контент провайдер, без корутин, потому что пока не реализовано через корутины
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addShopItemContentProvider(shopItemEntity: ShopItemEntity)
+
     @Query("DELETE FROM shop_items WHERE id=:shopItemId")
     suspend fun deleteShopItem(shopItemId: Int)
+
+    @Query("DELETE FROM shop_items WHERE id=:shopItemId")
+    fun deleteShopItemContentProvider(shopItemId: Int): Int
 
     @Query("SELECT * FROM shop_items WHERE id=:shopItemId LIMIT 1")
     suspend fun getShopItem(shopItemId: Int): ShopItemEntity
