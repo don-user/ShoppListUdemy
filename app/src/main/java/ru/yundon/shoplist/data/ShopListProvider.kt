@@ -5,7 +5,9 @@ import android.content.ContentValues
 import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
+import android.util.Log
 import ru.yundon.shoplist.data.database.ShopListDao
+import ru.yundon.shoplist.domain.model.ShopItem
 import ru.yundon.shoplist.presentation.ShopItemApp
 import javax.inject.Inject
 
@@ -19,6 +21,8 @@ class ShopListProvider: ContentProvider() {
     //инжектим Дао
     @Inject
     lateinit var shopListDao: ShopListDao
+    @Inject
+    lateinit var mapper: ShopListMapper
 
     private val uriMatcher = UriMatcher(UriMatcher.NO_MATCH).apply {
         //для передачи числа (например id в "path" через / добавляем # ("path/#"))
@@ -56,12 +60,38 @@ class ShopListProvider: ContentProvider() {
         TODO("Not yet implemented")
     }
 
-    override fun insert(p0: Uri, p1: ContentValues?): Uri? {
-        TODO("Not yet implemented")
+    //добавляем элементый в базу через контент провайдер, добавление закомментированно в ShopItemFragment
+    override fun insert(uri: Uri, value: ContentValues?): Uri? {
+        when(uriMatcher.match(uri)){
+            GET_SHOP_ITEM_QUERY -> {
+                if (value == null) return null
+                val id = value.getAsInteger("id")
+                val name = value.getAsString("name")
+                val count = value.getAsInteger("count")
+                val enable = value.getAsBoolean("count")
+                val shopItem = ShopItem(
+                    id = id,
+                    name = name,
+                    count = count,
+                    enable = enable
+                )
+                shopListDao.addShopItemContentProvider(mapper.mapModelToEntity(shopItem))
+            }
+        }
+        return null
     }
 
-    override fun delete(p0: Uri, p1: String?, p2: Array<out String>?): Int {
-        TODO("Not yet implemented")
+    //удаляет выбранные элементы, selection не используем, т.к. библиотека Рум за нас добавляет  необходимую надпись, но если без рум самостоятельно писали обращение в базу, то надо было  использовать
+    override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?): Int {
+        // проверем uri
+        when(uriMatcher.match(uri)) {
+            GET_SHOP_ITEM_QUERY -> {
+                //получаем необходимый id из массива  selectionArgs
+                val id = selectionArgs?.get(0)?.toInt() ?: -1
+                return shopListDao.deleteShopItemContentProvider(id) //удаляем через рум
+            }
+        }
+        return 0
     }
 
     override fun update(p0: Uri, p1: ContentValues?, p2: String?, p3: Array<out String>?): Int {

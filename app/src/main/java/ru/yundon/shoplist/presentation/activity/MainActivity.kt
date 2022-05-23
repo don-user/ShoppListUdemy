@@ -133,7 +133,17 @@ class MainActivity: AppCompatActivity() {
                         viewModel.deleteShopListItem(item)
                     }
                     ItemTouchHelper.RIGHT -> {
-                        viewModel.deleteShopListItem(item)
+
+                        //проводим не в майн потоке
+                        thread {
+                            //вызываем функцию делет у contentResolver и передаем массив
+                            contentResolver.delete(
+                                Uri.parse("content://ru.yundon.shoplist/shop_items"),
+                                null,
+                                arrayOf(item.id.toString())
+                            )
+                        }
+//                        viewModel.deleteShopListItem(item)
                     }
                 }
             }

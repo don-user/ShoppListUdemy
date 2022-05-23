@@ -1,6 +1,8 @@
 package ru.yundon.shoplist.presentation.fragment
 
+import android.content.ContentValues
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -15,6 +17,7 @@ import ru.yundon.shoplist.presentation.ShopItemApp
 import ru.yundon.shoplist.presentation.viewmodels.ShopItemViewModel
 import ru.yundon.shoplist.presentation.viewmodels.ViewModelFactory
 import javax.inject.Inject
+import kotlin.concurrent.thread
 
 class ShopItemFragment: Fragment() {
 
@@ -116,6 +119,19 @@ class ShopItemFragment: Fragment() {
         btSave.setOnClickListener {
 //            Toast.makeText(context, "BUTTON", Toast.LENGTH_SHORT).show()
             viewModels.addShopItem(edName.text?.toString(), edCount.text?.toString())
+
+//  Код для передачи ContentValues (данные для добавления в базу  контент провайдере)
+//            thread {
+//                context?.contentResolver?.insert(
+//                    Uri.parse("content://ru.yundon.shoplist/shop_items"),
+//                    ContentValues().apply {
+//                        put("id", 0)
+//                        put("name", edName.text?.toString())
+//                        put("count", edCount.text?.toString()?.toInt())
+//                        put("enable", true)
+//                    }
+//                )
+//            }
         }
     }
     //проверка параметров которые передаются через аргументы
