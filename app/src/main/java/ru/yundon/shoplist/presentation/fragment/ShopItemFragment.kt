@@ -112,6 +112,20 @@ class ShopItemFragment: Fragment() {
         viewModels.getShopItemById(shopItemId)
         btSave.setOnClickListener {
             viewModels.editShopItem(edName.text?.toString(), edCount.text?.toString())
+//
+//            thread {
+//                context?.contentResolver?.update(
+//                    Uri.parse("content://ru.yundon.shoplist/shop_items"),
+//                    ContentValues().apply {
+//                        put("id", 0)
+//                        put("name", edName.text?.toString())
+//                        put("count", edCount.text?.toString()?.toInt())
+//                        put("enable", true)
+//                    },
+//                    null,
+//                    arrayOf()
+//                )
+//            }
         }
     }
 

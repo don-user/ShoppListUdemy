@@ -94,8 +94,24 @@ class ShopListProvider: ContentProvider() {
         return 0
     }
 
-    override fun update(p0: Uri, p1: ContentValues?, p2: String?, p3: Array<out String>?): Int {
-        TODO("Not yet implemented")
+    override fun update(uri: Uri, value: ContentValues?, selection: String?, selectionArgs: Array<out String>?): Int {
+        when(uriMatcher.match(uri)) {
+            GET_SHOP_ITEM_QUERY -> {
+                if (value == null) return 0
+                val id = value.getAsInteger("id")
+                val name = value.getAsString("name")
+                val count = value.getAsInteger("count")
+                val enable = value.getAsBoolean("count")
+                val shopItem = ShopItem(
+                    id = id,
+                    name = name,
+                    count = count,
+                    enable = enable
+                )
+                shopListDao.addShopItemContentProvider(mapper.mapModelToEntity(shopItem))
+            }
+        }
+        return 1
     }
 
     companion object{
